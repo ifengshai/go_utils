@@ -1,4 +1,4 @@
-package fs_utils
+package go_utils
 
 import (
 	"fmt"
