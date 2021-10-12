@@ -1,4 +1,4 @@
-module github.com/ifengshai/go_utils/fs_utils
+module github.com/ifengshai/go_utils
 
 go 1.16
 
