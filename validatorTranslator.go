@@ -47,23 +47,11 @@ func InitTrans(locale string) (err error) {
 			return fmt.Errorf("uni.GetTranslator(%s) failed", locale)
 		}
 
-		// 添加额外翻译
-		_ = v.RegisterTranslation("required_with", trans, func(ut ut.Translator) error {
-			return ut.Add("required_with", "{0} 为必填字段!", true)
+		// 添加额外自定义验证方法报错的翻译
+		_ = v.RegisterTranslation("notadmin", trans, func(ut ut.Translator) error {
+			return ut.Add("notadmin", "{0} admin不能用!", true)
 		}, func(ut ut.Translator, fe validator.FieldError) string {
-			t, _ := ut.T("required_with", fe.Field())
-			return t
-		})
-		_ = v.RegisterTranslation("required_without", trans, func(ut ut.Translator) error {
-			return ut.Add("required_without", "{0} 为必填字段!", true)
-		}, func(ut ut.Translator, fe validator.FieldError) string {
-			t, _ := ut.T("required_without", fe.Field())
-			return t
-		})
-		_ = v.RegisterTranslation("required_without_all", trans, func(ut ut.Translator) error {
-			return ut.Add("required_without_all", "{0} 为必填字段!", true)
-		}, func(ut ut.Translator, fe validator.FieldError) string {
-			t, _ := ut.T("required_without_all", fe.Field())
+			t, _ := ut.T("notadmin", fe.Field())
 			return t
 		})
 
