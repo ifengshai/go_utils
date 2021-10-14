@@ -16,7 +16,7 @@ import (
 )
 
 // 定义一个全局翻译器
-var trans ut.Translator
+var Trans ut.Translator
 
 // InitTrans 初始化翻译器
 func InitTrans(locale string) (err error) {
@@ -42,13 +42,13 @@ func InitTrans(locale string) (err error) {
 		// locale 通常取决于 http 请求头的 'Accept-Language'
 		var ok bool
 		// 也可以使用 uni.FindTranslator(...) 传入多个locale进行查找
-		trans, ok = uni.GetTranslator(locale)
+		Trans, ok = uni.GetTranslator(locale)
 		if !ok {
 			return fmt.Errorf("uni.GetTranslator(%s) failed", locale)
 		}
 
 		// 添加额外自定义验证方法报错的翻译
-		_ = v.RegisterTranslation("notadmin", trans, func(ut ut.Translator) error {
+		_ = v.RegisterTranslation("notadmin", Trans, func(ut ut.Translator) error {
 			return ut.Add("notadmin", "{0} admin不能用!", true)
 		}, func(ut ut.Translator, fe validator.FieldError) string {
 			t, _ := ut.T("notadmin", fe.Field())
@@ -58,11 +58,11 @@ func InitTrans(locale string) (err error) {
 		// 注册翻译器
 		switch locale {
 		case "en":
-			err = enTranslations.RegisterDefaultTranslations(v, trans)
+			err = enTranslations.RegisterDefaultTranslations(v, Trans)
 		case "zh":
-			err = zhTranslations.RegisterDefaultTranslations(v, trans)
+			err = zhTranslations.RegisterDefaultTranslations(v, Trans)
 		default:
-			err = enTranslations.RegisterDefaultTranslations(v, trans)
+			err = enTranslations.RegisterDefaultTranslations(v, Trans)
 		}
 		return
 	}
@@ -115,6 +115,6 @@ func ErrResp(err error) *gin.H {
 	}
 	return &gin.H{
 		"errCode": -1,
-		"errMsg":  removeTopStruct(errs.Translate(trans)), // 翻译校验错误提示
+		"errMsg":  removeTopStruct(errs.Translate(Trans)), // 翻译校验错误提示
 	}
 }
