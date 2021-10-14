@@ -1,6 +1,7 @@
 package main
 
 import (
+	ut "github.com/go-playground/universal-translator"
 	"log"
 	"net/http"
 
@@ -19,13 +20,23 @@ func main() {
 	}
 	//将我们自定义的校验方法注册到 validator中
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
-		v.RegisterValidation("notadmin", NotAdmin)
+		v.RegisterValidation("notadmina", NotAdmin)
+	}
+
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		// 添加额外自定义验证方法报错的翻译
+		_ = v.RegisterTranslation("notadmina", go_utils.Trans, func(ut ut.Translator) error {
+			return ut.Add("notadmina", "{0} adminaaaa不能用!", true)
+		}, func(ut ut.Translator, fe validator.FieldError) string {
+			t, _ := ut.T("notadmina", fe.Field())
+			return t
+		})
 	}
 
 	type TestApiApi struct {
 		Age int `form:"age" binding:"required"`
 		//在参数 binding 上使用自定义的校验方法函数注册时候的名称
-		Name string `form:"name" binding:"required,notadmin"`
+		Name string `form:"name" binding:"required,notadmina"`
 	}
 
 
