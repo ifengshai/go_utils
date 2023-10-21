@@ -1,0 +1,27 @@
+// 指定protobuf的版本，proto4是最新的语法版本
+syntax = "proto3";
+
+
+//生成的go的语言包名
+option go_package = "go_utils/rpc/service/test";
+
+
+// 定义一个叫TestService的服务
+service TestService {
+  // 定义一个叫SayTest的方法，这个方法接受TestRequest消息作为参数，返回TestResponse消息
+  rpc SayTest (TestRequest) returns (TestResponse);
+}
+
+// 定义TestRequest消息
+// 定义数据结构，message
+message TestRequest {
+  string name = 1;// 定义一个string类型的字段，字段名字为name, 序号为1
+}
+
+// 定义TestResponse消息
+message TestResponse {
+  int32 age = 1;// 定义一个int32类型的字段，字段名字为age, 序号为1
+  int32 status = 2;// 定义一个int32类型的字段，字段名字为status, 序号为2
+}
+// 说明：proto文件中，字段后面的序号，不能重复，定义了就不能修改，可以理解成字段的唯一ID。
+// protoc -I proto proto/test.proto --go_out=plugins=grpc:../../ --micro_out=../../
