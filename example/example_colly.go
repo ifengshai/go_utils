@@ -63,7 +63,7 @@ func colly(ctx context.Context, href string) {
 	//执行爬虫任务
 	err := chromedp.Run(
 		ctx,
-		chromedp.Navigate(href),                                         //导航到指定的网址（爬虫训练网站：https://scrape.center/）
+		chromedp.Navigate(href), //导航到指定的网址（爬虫训练网站：https://scrape.center/）
 		chromedp.WaitVisible("ul.el-pager li.number", chromedp.ByQuery), //等待指定标签显示
 		chromedp.InnerHTML("html", &htmlContent),
 
