@@ -21,6 +21,7 @@ require (
 
 require (
 	github.com/andybalholm/cascadia v1.3.2 // indirect
+	github.com/cavaliergopher/grab/v3 v3.0.1 // indirect
 	github.com/chromedp/cdproto v0.0.0-20231007061347-18b01cd81617 // indirect
 	github.com/chromedp/sysutil v1.0.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect

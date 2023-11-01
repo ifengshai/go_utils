@@ -1,6 +1,7 @@
 package go_utils
 
 import (
+	"bytes"
 	"crypto/md5"
 	cryptoRand "crypto/rand"
 	"encoding/base64"
@@ -8,7 +9,9 @@ import (
 	"fmt"
 	"go.uber.org/zap"
 	"io"
+	"io/ioutil"
 	mathRand "math/rand"
+	"net/http"
 	"os"
 	"time"
 )
@@ -77,4 +80,63 @@ func CreateDir(dirs ...string) (err error) {
 		}
 	}
 	return err
+}
+
+// SendHTTPRequest 发送HTTP请求并返回响应数据
+// url: 请求的URL地址
+// method: 请求的方法（GET、POST等）
+// headers: 请求头部信息
+// body: 请求体数据
+// timeout: 请求超时时间
+// retryCount: 请求重试次数
+// retryInterval: 请求重试间隔时间
+// alarm: 是否开启请求失败告警
+// ([]byte, error): 返回响应的字节数组和可能的错误
+func SendHTTPRequest(url string, method string, headers map[string]string, body []byte,
+	timeout time.Duration, retryCount int, retryInterval time.Duration, alarm bool) ([]byte, error) {
+
+	var err error
+	var responseBody []byte
+
+	for i := 0; i < retryCount+1; i++ {
+		req, err := http.NewRequest(method, url, bytes.NewBuffer(body))
+		if err != nil {
+			if i == retryCount && alarm {
+				fmt.Printf("新建请求出错：%s\n", err.Error())
+			}
+			continue
+		}
+
+		for k, v := range headers {
+			req.Header.Set(k, v)
+		}
+
+		client := &http.Client{Timeout: timeout}
+		resp, err := client.Do(req)
+		if err != nil {
+			if i == retryCount && alarm {
+				fmt.Printf("第 %d 次请求失败：%s\n", i+1, err.Error())
+			}
+			time.Sleep(retryInterval)
+			continue
+		}
+		defer resp.Body.Close()
+
+		responseBody, err = ioutil.ReadAll(resp.Body)
+		if err != nil {
+			if i == retryCount && alarm {
+				fmt.Printf("第 %d 次请求失败：读取响应出错：%s\n", i+1, err.Error())
+			}
+			time.Sleep(retryInterval)
+			continue
+		}
+
+		break
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return responseBody, nil
 }
