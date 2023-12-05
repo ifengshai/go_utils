@@ -23,3 +23,5 @@ golang.org/x/crypto
 github.com/redis/go-redis
 ## ES操作
 github.com/elastic/go-elasticsearch
+## 组装数据库sql语句
+go get github.com/Masterminds/squirrel
