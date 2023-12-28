@@ -8,14 +8,17 @@ import (
 )
 
 func main() {
-	urlLink := "https://api.44h4.com/lc.php?cid=216053830"
+	urlLink := "http://www.etmp3.com/js/play.php"
 	method := "POST"
 	headers := map[string]string{
-		"Content-Type": "application/x-www-form-urlencoded",
+		"content-Type": "application/x-www-form-urlencoded",
+		"accept":       "application/json, text/plain, */*",
+		"origin":       "http://www.etmp3.com",
+		"referer":      "http://www.etmp3.com/mp3/216053830.html",
 	}
 	body := map[string]string{
-		"name": "Alice",
-		"age":  "25",
+		"id":   "216053830",
+		"type": "mp3",
 	}
 	timeout := 3 * time.Second
 	retryCount := 2
@@ -23,7 +26,7 @@ func main() {
 
 	values := url.Values{}
 	for k, v := range body {
-		values.Set(k, v)
+		values.Add(k, v)
 	}
 
 	response, err := go_utils.SendHTTPRequest(urlLink, method, headers, []byte(values.Encode()),
@@ -34,4 +37,5 @@ func main() {
 	}
 
 	fmt.Printf("响应内容：%s\n", string(response))
+
 }

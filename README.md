@@ -25,3 +25,7 @@ github.com/redis/go-redis
 github.com/elastic/go-elasticsearch
 ## 组装数据库sql语句
 go get github.com/Masterminds/squirrel
+## 爬虫 
+github.com/chromedp/chromedp
+## html内容解析
+github.com/PuerkitoBio/goquery
