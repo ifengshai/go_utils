@@ -12,7 +12,7 @@ github.com/golang-module/carbon
 ## 定时任务
 github.com/robfig/cron/v3
 ## json处理
-github.com/json-iterator/go
+github.com/tidwall/gjson
 ## 下载工具
 github.com/cavaliercoder/grab
 ## 参数验证包
@@ -29,3 +29,36 @@ go get github.com/Masterminds/squirrel
 github.com/chromedp/chromedp
 ## html内容解析
 github.com/PuerkitoBio/goquery
+## GRPC
+# 安装protoc
+## 下载protoc命令到gopath/bin目录中
+https://github.com/protocolbuffers/protobuf/releases/
+
+## windows编译protoc：
+windows下安装make命令
+https://www.mingw-w64.org/downloads/
+https://sourceforge.net/projects/mingw/
+安装编译工具cmake：
+https://cmake.org/download/
+安装编译库visualstudio：
+https://learn.microsoft.com/zh-cn/visualstudio/releases/2022/release-notes
+下载grpc（可能需要梯子）:
+git clone https://github.com/grpc/grpc
+下载依赖包（必须需要梯子）：
+git submodule update --init
+配置编译库：
+cmake .. -G "Visual Studio 17 2022"
+开始编译：
+cmake --build . --config Release
+
+~~~shell
+go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+go install github.com/google/gnostic/cmd/protoc-gen-openapi@latest
+
+#生成go语言代码
+protoc --proto_path=./proto/ --go_out=./protobuf/go --go-grpc_out=./protobuf/go ./proto/*.proto
+
+#生成php语言代码
+protoc --proto_path=./proto/ --php_out=./protobuf/php --grpc_out=generate_server:./protobuf/php --plugin=protoc-gen-grpc=/fengsha/grpc/build-cmake/grpc_php_plugin ./proto/*.proto
+~~~

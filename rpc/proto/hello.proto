@@ -1,6 +1,10 @@
 syntax = "proto3";
 
+//生成的go的语言包名
 option go_package = "go_utils/rpc/service/hello";
+//生成的php语言包名
+option php_metadata_namespace = 'Fengsha\\Grpc';
+option php_namespace = 'Fengsha\\Grpc';
 
 package helloworld;
 
@@ -19,5 +23,3 @@ message HelloRequest {
 message HelloReply {
   string message = 1;
 }
-
-//protoc -I proto proto/hello.proto --go_out=plugins=grpc:../../

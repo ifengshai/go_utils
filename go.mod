@@ -16,7 +16,7 @@ require (
 	go.uber.org/zap v1.19.1
 	golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d
 	google.golang.org/grpc v1.41.0
-	google.golang.org/protobuf v1.31.0
+	google.golang.org/protobuf v1.32.0
 )
 
 require (
@@ -36,6 +36,9 @@ require (
 	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
 	github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742 // indirect
+	github.com/tidwall/gjson v1.17.0 // indirect
+	github.com/tidwall/match v1.1.1 // indirect
+	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/ugorji/go/codec v1.1.7 // indirect
 	github.com/xwb1989/sqlparser v0.0.0-20171128062118-da747e0c62c4 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
