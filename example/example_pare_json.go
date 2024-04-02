@@ -19,14 +19,12 @@ func main() {
 	scanner := bufio.NewScanner(file)
 	buf := make([]byte, 0, 64*1024)
 	scanner.Buffer(buf, 1024*1024)
-
 	for scanner.Scan() {
 		line := scanner.Text()
 
 		//每行执行
-		value := gjson.Get(line, "data.app_index_product.products.#(group_id == \"99999999\")#.products.#.id")
+		value := gjson.Get(line, "0")
 		fmt.Println(value)
-		os.Exit(1)
 	}
 	if scanner.Err() != nil {
 		fmt.Println(scanner.Err())
