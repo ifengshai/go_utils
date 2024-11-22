@@ -3,13 +3,13 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/golang-module/carbon/v2"
+	"github.com/tidwall/gjson"
 	"os"
 )
 
 func main() {
 	// 打开文件
-	file, err := os.Open("./../file/aaa.txt")
+	file, err := os.Open("./../file/message.json")
 	if err != nil {
 		fmt.Println("Error opening file:", err)
 		return
@@ -24,8 +24,9 @@ func main() {
 		line := scanner.Text()
 
 		//每行执行
-		est := carbon.Parse(line, "PRC").SetTimezone("EST").ToDateTimeString()
-		fmt.Println(est)
+		value := gjson.Get(line, "create_time")
+		fmt.Println(value)
+
 	}
 	if scanner.Err() != nil {
 		fmt.Println(scanner.Err())

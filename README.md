@@ -60,5 +60,5 @@ go install github.com/google/gnostic/cmd/protoc-gen-openapi@latest
 protoc --proto_path=./proto/ --go_out=./protobuf/go --go-grpc_out=./protobuf/go ./proto/*.proto
 
 #生成php语言代码
-protoc --proto_path=./proto/ --php_out=./protobuf/php --grpc_out=generate_server:./protobuf/php --plugin=protoc-gen-grpc=/fengsha/grpc/build-cmake/grpc_php_plugin ./proto/*.proto
+protoc --proto_path=./proto/ --php_out=./protobuf/php --plugin=protoc-gen-grpc=/fengsha/grpc/build-cmake/grpc_php_plugin ./proto/*.proto
 ~~~
