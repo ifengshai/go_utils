@@ -61,4 +61,7 @@ protoc --proto_path=./proto/ --go_out=./protobuf/go --go-grpc_out=./protobuf/go 
 
 #生成php语言代码
 protoc --proto_path=./proto/ --php_out=./protobuf/php --plugin=protoc-gen-grpc=/fengsha/grpc/build-cmake/grpc_php_plugin ./proto/*.proto
+
+protoc --proto_path=. --proto_path=./third_party --proto_path=./third_party/validate/ --proto_path=./third_party/google/api/ --proto_path=./marketing/interface/proto/marketing/v1/ --php_out=./src --grpc_out=./src --plugin=protoc-gen-grpc=D:\workspace\gopath\bin\grpc_php_plugin.exe ./marketing/interface/proto/marketing/v1/marketing.proto
+
 ~~~
