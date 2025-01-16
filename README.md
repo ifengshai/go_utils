@@ -8,9 +8,9 @@ github.com/spf13/cobra
 ## .env文件读取变量
 github.com/joho/godotenv
 ## carbon时间处理包
-github.com/golang-module/carbon
+github.com/dromara/carbon/v2
 ## 定时任务
-github.com/robfig/cron/v3
+github.com/robfig/cron/v3@v3.0.0
 ## json处理
 github.com/tidwall/gjson
 ## 下载工具
