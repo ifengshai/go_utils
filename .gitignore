@@ -5,4 +5,8 @@
 
 # opencv 打包输出（由 opencv/package_go_opencv.ps1 生成）
 /opencv/windows/*
-file
+
+# power_monitor 打包输出（由 power_monitor/package_power_monitor.ps1 生成）
+/power_monitor/windows/*
+
+/file/*

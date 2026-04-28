@@ -29,6 +29,9 @@ go get github.com/Masterminds/squirrel
 github.com/chromedp/chromedp
 ## html内容解析
 github.com/PuerkitoBio/goquery
+## FFmpeg 是免费开源、跨平台的音视频处理 “瑞士军刀”
+## WindowsUI
+github.com/fyne-io/fyne
 ## GRPC
 # 安装protoc
 ## 下载protoc命令到gopath/bin目录中
