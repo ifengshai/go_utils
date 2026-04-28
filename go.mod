@@ -18,7 +18,7 @@ require (
 	github.com/kbinani/screenshot v0.0.0-20250624051815-089614a94018
 	github.com/tidwall/gjson v1.17.0
 	go.uber.org/zap v1.19.1
-	gocv.io/x/gocv v0.28.0
+	gocv.io/x/gocv v0.43.0
 	golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d
 	golang.org/x/net v0.16.0
 	google.golang.org/grpc v1.41.0
