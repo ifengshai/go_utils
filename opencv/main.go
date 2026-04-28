@@ -51,7 +51,7 @@ type matchResult struct {
 func main() {
 	minScale := flag.Float64("min", 0.65, "模板相对屏幕截图的最小缩放比例（应对 DPI/分辨率差异）")
 	maxScale := flag.Float64("max", 1.45, "模板相对屏幕截图的最大缩放比例")
-	steps := flag.Int("steps", 33, "在 [min,max] 之间线性采样的缩放档位数")
+	steps := flag.Int("steps", 15, "在 [min,max] 之间线性采样的缩放档位数")
 	threshold := flag.Float64("thresh", 0.72, "TM_CCOEFF_NORMED 峰值检测最低分（用于找候选）")
 	minScore := flag.Float64("minscore", 0.8, "只输出分数>=该值的命中；默认 0.8")
 	flag.Parse()
