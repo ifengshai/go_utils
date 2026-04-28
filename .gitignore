@@ -3,6 +3,6 @@
 .vscode
 .opengcv_gocache_cleared
 
-# go_opencv 打包输出（由 scripts/package_go_opencv.ps1 生成）
-/go_opencv/lib/
-/go_opencv/*.exe
+# opencv 打包输出（由 opencv/package_go_opencv.ps1 生成）
+/opencv/windows/*
+file
