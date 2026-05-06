@@ -30,8 +30,15 @@ github.com/chromedp/chromedp
 ## html内容解析
 github.com/PuerkitoBio/goquery
 ## FFmpeg 是免费开源、跨平台的音视频处理 “瑞士军刀”
-## WindowsUI
+## WindowsUI window界面库
 github.com/fyne-io/fyne
+## Robotgo 控制鼠标、键盘、读取屏幕、处理、窗口柄、图像和位图以及全局事件监听器。
+github.com/go-vgo/robotgo
+## ocr图片识别文字 Tesseract + gosseract
+github.com/otiai10/gosseract 
+## onnx，模型调用
+github.com/yalue/onnxruntime_go
+
 ## GRPC
 # 安装protoc
 ## 下载protoc命令到gopath/bin目录中

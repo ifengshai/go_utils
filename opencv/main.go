@@ -32,6 +32,7 @@ import (
 	"image"
 	"os"
 	"sort"
+	"sync"
 
 	"github.com/kbinani/screenshot"
 	"gocv.io/x/gocv"
@@ -198,6 +199,7 @@ const (
 )
 
 // matchMultiScaleAll 在同一显示器上多尺度匹配，每尺度取多个峰值并做 NMS，避免相邻尺度重复框。
+// 各尺度通过 goroutine 并发执行，每个 goroutine 持有独立的 Mat，screenGray/tplGray 只读共享。
 func matchMultiScaleAll(
 	screenGray gocv.Mat,
 	tplGray gocv.Mat,
@@ -216,53 +218,76 @@ func matchMultiScaleAll(
 		steps = 2
 	}
 
-	result := gocv.NewMat()
-	defer result.Close()
-	resized := gocv.NewMat()
-	defer resized.Close()
-	mask := gocv.NewMat()
-	defer mask.Close()
-
-	var cand []matchResult
+	// 每个 goroutine 处理一个尺度，结果通过 channel 汇总
+	ch := make(chan []matchResult, steps)
+	var wg sync.WaitGroup
 
 	for s := 0; s < steps; s++ {
-		t := float64(s) / float64(steps-1)
-		scale := minScale + t*(maxScale-minScale)
-		if scale <= 0 {
-			continue
-		}
-		nw := int(float64(tw0)*scale + 0.5)
-		nh := int(float64(th0)*scale + 0.5)
-		if nw < 4 || nh < 4 || nw >= sw || nh >= sh {
-			continue
-		}
-		interp := gocv.InterpolationLinear
-		if nw < tw0 || nh < th0 {
-			interp = gocv.InterpolationArea
-		}
-		gocv.Resize(tplGray, &resized, image.Pt(nw, nh), 0, 0, interp)
+		wg.Add(1)
+		go func(s int) {
+			defer wg.Done()
 
-		gocv.MatchTemplate(screenGray, resized, &result, gocv.TmCcoeffNormed, mask)
-
-		for p := 0; p < maxPeaksPerScale; p++ {
-			_, maxVal, _, maxLoc := gocv.MinMaxLoc(result)
-			mv := float64(maxVal)
-			if mv < threshold {
-				break
+			t := float64(s) / float64(steps-1)
+			scale := minScale + t*(maxScale-minScale)
+			if scale <= 0 {
+				ch <- nil
+				return
 			}
-			left := offsetX + maxLoc.X
-			top := offsetY + maxLoc.Y
-			cand = append(cand, matchResult{
-				DisplayIndex: displayIndex,
-				Scale:        scale,
-				Score:        mv,
-				Left:         left,
-				Top:          top,
-				Right:        left + nw - 1,
-				Bottom:       top + nh - 1,
-			})
-			suppressMatchRegion(&result, maxLoc, nw, nh)
-		}
+			nw := int(float64(tw0)*scale + 0.5)
+			nh := int(float64(th0)*scale + 0.5)
+			if nw < 4 || nh < 4 || nw >= sw || nh >= sh {
+				ch <- nil
+				return
+			}
+
+			// 每个 goroutine 独立的 Mat，避免并发写冲突
+			resized := gocv.NewMat()
+			defer resized.Close()
+			result := gocv.NewMat()
+			defer result.Close()
+			mask := gocv.NewMat()
+			defer mask.Close()
+
+			interp := gocv.InterpolationLinear
+			if nw < tw0 || nh < th0 {
+				interp = gocv.InterpolationArea
+			}
+			gocv.Resize(tplGray, &resized, image.Pt(nw, nh), 0, 0, interp)
+			gocv.MatchTemplate(screenGray, resized, &result, gocv.TmCcoeffNormed, mask)
+
+			var local []matchResult
+			for p := 0; p < maxPeaksPerScale; p++ {
+				_, maxVal, _, maxLoc := gocv.MinMaxLoc(result)
+				mv := float64(maxVal)
+				if mv < threshold {
+					break
+				}
+				left := offsetX + maxLoc.X
+				top := offsetY + maxLoc.Y
+				local = append(local, matchResult{
+					DisplayIndex: displayIndex,
+					Scale:        scale,
+					Score:        mv,
+					Left:         left,
+					Top:          top,
+					Right:        left + nw - 1,
+					Bottom:       top + nh - 1,
+				})
+				suppressMatchRegion(&result, maxLoc, nw, nh)
+			}
+			ch <- local
+		}(s)
+	}
+
+	// 等所有 goroutine 完成后关闭 channel
+	go func() {
+		wg.Wait()
+		close(ch)
+	}()
+
+	var cand []matchResult
+	for local := range ch {
+		cand = append(cand, local...)
 	}
 
 	return nmsByIoU(cand, nmsIoU)

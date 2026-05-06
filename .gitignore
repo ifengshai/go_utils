@@ -10,3 +10,19 @@
 /power_monitor/windows/*
 
 /file/*
+
+# 所有 .exe 文件
+*.exe
+
+# 编译输出目录
+bin/
+obj/
+dist/
+build/
+out/
+
+# Go 编译输出
+*.test
+*.test.exe
+*.prof
+*.prof.exe
